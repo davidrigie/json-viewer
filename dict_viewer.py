@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-__author__ = "Ashwin Nanjappa"
-
 # GUI viewer to view JSON data as tree.
 # Ubuntu packages needed:
 # python3-pyqt5
@@ -41,7 +39,7 @@ class TextToTreeItem:
 
 class JsonView(QtWidgets.QWidget):
 
-    def __init__(self, fpath):
+    def __init__(self, d):
         super(JsonView, self).__init__()
 
         self.find_box = None
@@ -51,8 +49,7 @@ class JsonView(QtWidgets.QWidget):
         self.found_titem_list = []
         self.found_idx = 0
 
-        jfile = open(fpath)
-        jdata = json.load(jfile, object_pairs_hook=collections.OrderedDict)
+        jdata = d
 
         # Find UI
 
@@ -75,7 +72,7 @@ class JsonView(QtWidgets.QWidget):
 
         # Group box
 
-        gbox = QtWidgets.QGroupBox(fpath)
+        gbox = QtWidgets.QGroupBox('')
         gbox.setLayout(layout)
 
         layout2 = QtWidgets.QVBoxLayout()
@@ -151,11 +148,10 @@ class JsonView(QtWidgets.QWidget):
 
 class JsonViewer(QtWidgets.QMainWindow):
 
-    def __init__(self):
+    def __init__(self, d):
         super(JsonViewer, self).__init__()
 
-        fpath = sys.argv[1]
-        json_view = JsonView(fpath)
+        json_view = JsonView(d)
 
         self.setCentralWidget(json_view)
         self.setWindowTitle("JSON Viewer")
@@ -166,11 +162,8 @@ class JsonViewer(QtWidgets.QMainWindow):
             self.close()
 
 
-def main():
-    qt_app = QtWidgets.QApplication(sys.argv)
-    json_viewer = JsonViewer()
-    sys.exit(qt_app.exec_())
+def view(d):
+    qt_app = QtWidgets.QApplication([])
+    json_viewer = JsonViewer(d)
+    qt_app.exec_()
 
-
-if "__main__" == __name__:
-    main()
